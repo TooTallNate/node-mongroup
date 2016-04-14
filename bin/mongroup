@@ -26,6 +26,7 @@ program.on('--help', function(){
   console.log('  commands:');
   console.log();
   console.log('    status           output process status');
+  console.log('    names            output process names, one per line');
   console.log('    stop [names]     stop all or specified processes');
   console.log('    start [names]    start all or specified processes');
   console.log('    restart [names]  restart all or specified processes');
@@ -66,6 +67,7 @@ switch (cmd) {
   case 'start': return start(program.args);
   case 'restart': return restart(program.args);
   case 'status': return program.json ? jsonstatus() : status();
+  case 'names': return names();
   default: throw new Error('invalid command "' + cmd + '"');
 }
 
@@ -144,6 +146,16 @@ function jsonstatus() {
   });
 
   console.log(JSON.stringify(procs, null, 2));
+}
+
+/**
+ * Output process names, one per line. Useful for Unix pipeline processing.
+ */
+
+function names() {
+  group.procs.forEach(function(proc){
+    console.log(proc.name);
+  });
 }
 
 /**
